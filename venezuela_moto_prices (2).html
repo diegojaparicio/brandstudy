@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercado de Motos Venezuela — Informe Competitivo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#0D1B2A; --blue:#1565C0; --ltblue:#E3F0FF;
+    --green:#1B5E20; --ltgreen:#E8F5E9; --red:#B71C1C; --ltred:#FFEBEE;
+    --gold:#E65100; --ltgold:#FFF3E0; --grey:#546E7A; --ltgrey:#ECEFF1;
+    --white:#FFFFFF; --ink:#1A1A2E;
+  }
+  body { font-family:'DM Sans',sans-serif; background:#F4F6F9; padding:32px 20px 60px; color:var(--ink); }
+  .wrapper { max-width:1200px; margin:0 auto; }
+
+  .page-break { margin:60px 0 40px; display:flex; align-items:center; gap:16px; }
+  .page-break-line { flex:1; height:1px; background:#D0D7E2; }
+  .page-break-label { font-family:'DM Mono',monospace; font-size:10px; color:#90A4AE; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; }
+
+  .header { background:var(--navy); border-radius:12px 12px 0 0; padding:28px 32px 20px; display:flex; align-items:flex-end; justify-content:space-between; gap:16px; }
+  .header-label { font-family:'DM Mono',monospace; font-size:11px; color:#78909C; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+  .header-title { font-family:'Bebas Neue',sans-serif; font-size:36px; color:#FFFFFF; letter-spacing:1px; line-height:1; }
+  .header-sub { font-size:13px; color:#90A4AE; margin-top:6px; font-weight:400; }
+  .header-badge { background:#1565C0; color:#fff; font-family:'DM Mono',monospace; font-size:11px; font-weight:500; padding:6px 14px; border-radius:20px; letter-spacing:1px; white-space:nowrap; }
+  .header-badge2 { background:#1B5E20; }
+
+  .legend { background:#E8ECF2; padding:10px 32px; display:flex; gap:24px; flex-wrap:wrap; border-left:1px solid #D0D7E2; border-right:1px solid #D0D7E2; }
+  .legend-item { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--grey); font-weight:500; }
+  .leg-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+
+  .table-wrap { overflow-x:auto; border-radius:0 0 12px 12px; box-shadow:0 4px 24px rgba(0,0,0,0.10); }
+  table { width:100%; border-collapse:collapse; background:var(--white); font-size:13px; }
+  thead tr { background:var(--navy); }
+  thead th { padding:13px 14px; text-align:left; font-family:'DM Mono',monospace; font-size:10px; font-weight:500; color:#90A4AE; letter-spacing:1.5px; text-transform:uppercase; white-space:nowrap; border-right:1px solid rgba(255,255,255,0.06); }
+  thead th:last-child { border-right:none; }
+  tbody tr { border-bottom:1px solid #E8ECF2; transition:background 0.15s; }
+  tbody tr:hover { background:#F7F9FC; }
+  tbody tr:last-child { border-bottom:none; }
+  td { padding:14px 14px; vertical-align:top; border-right:1px solid #EEF1F5; line-height:1.45; }
+  td:last-child { border-right:none; }
+
+  .brand-cell { min-width:130px; }
+  .brand-name { font-weight:700; font-size:14px; color:var(--navy); display:block; margin-bottom:3px; }
+  .brand-origin { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
+  .brand-flag { font-size:15px; line-height:1; }
+  .brand-country { font-size:10px; color:var(--grey); font-family:'DM Mono',monospace; letter-spacing:0.5px; text-transform:uppercase; }
+  .brand-sub { font-size:11px; color:var(--grey); font-style:italic; }
+
+  .model-cell { min-width:150px; }
+  .model-name { font-weight:600; color:var(--ink); font-size:13px; }
+  .model-cc { font-size:11px; color:var(--grey); margin-top:2px; font-family:'DM Mono',monospace; }
+
+  .seg-pill { display:inline-block; padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600; letter-spacing:0.3px; white-space:nowrap; }
+  .seg-utility { background:#E8F5E9; color:#2E7D32; }
+  .seg-commuter { background:#E3F0FF; color:#1565C0; }
+  .seg-cargo { background:#E0F2F1; color:#00695C; }
+  .seg-scooter { background:#F3E5F5; color:#6A1B9A; }
+
+  .price-cell { min-width:110px; white-space:nowrap; }
+  .price-val { font-family:'DM Mono',monospace; font-size:15px; font-weight:700; color:var(--navy); }
+  .price-note { font-size:11px; color:var(--grey); margin-top:2px; }
+
+  .status-cell { min-width:130px; }
+  .status-badge { display:inline-block; padding:4px 10px; border-radius:4px; font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; white-space:nowrap; }
+  .s-present { background:var(--ltgreen); color:var(--green); }
+  .s-partial { background:var(--ltgold); color:var(--gold); }
+  .s-absent { background:var(--ltred); color:var(--red); }
+  .status-note { font-size:11px; color:var(--grey); margin-top:4px; }
+
+  .notes-cell { min-width:180px; font-size:12px; color:#37474F; }
+  .note-highlight { color:var(--blue); font-weight:600; }
+  .note-warn { color:var(--gold); font-weight:600; }
+  .note-strong { color:var(--green); font-weight:600; }
+
+  .presence-cell { min-width:240px; font-size:11.5px; color:#37474F; }
+  .presence-list { list-style:none; padding:0; margin:0; }
+  .presence-list li { padding:3px 0; border-bottom:1px dotted #EEF1F5; display:flex; align-items:flex-start; gap:6px; line-height:1.5; }
+  .presence-list li:last-child { border-bottom:none; }
+  .p-flag { font-size:13px; flex-shrink:0; margin-top:1px; }
+  .p-country { font-weight:600; color:var(--navy); }
+  .p-dist { color:var(--grey); font-size:11px; }
+  .p-open { color:var(--green); font-weight:700; font-size:11px; }
+  .contact-cell { min-width:200px; font-size:12px; color:#37474F; }
+
+  .tvs-notes { list-style:none; padding:0; margin:6px 0 0 0; }
+  .tvs-notes li { padding:3px 0 3px 12px; border-left:2px solid #1565C0; margin-bottom:4px; font-size:11px; color:#37474F; line-height:1.4; }
+
+  .row-tvs td:first-child { border-left:4px solid #1565C0; }
+  .row-honda td:first-child { border-left:4px solid #CC0000; }
+  .row-bajaj td:first-child { border-left:4px solid #E65100; }
+  .row-suzuki td:first-child { border-left:4px solid #1B5E20; }
+  .row-hero td:first-child { border-left:4px solid #880E4F; }
+  .row-haojue td:first-child { border-left:4px solid #F57F17; }
+
+  .section-row td { background:#F0F4FA; padding:7px 14px; font-family:'DM Mono',monospace; font-size:10px; font-weight:700; color:#78909C; letter-spacing:2px; text-transform:uppercase; border-right:none; }
+
+  .footer { margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .insight-box { background:var(--white); border-radius:10px; padding:18px 20px; box-shadow:0 2px 10px rgba(0,0,0,0.06); border-left:4px solid var(--blue); }
+  .insight-box.warn { border-left-color:var(--gold); }
+  .insight-box.green { border-left-color:#2E7D32; }
+  .insight-box.red { border-left-color:var(--red); }
+  .insight-title { font-family:'DM Mono',monospace; font-size:10px; color:var(--grey); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:7px; }
+  .insight-body { font-size:13px; color:var(--ink); line-height:1.6; }
+  .insight-body strong { color:var(--navy); }
+
+  .conf-note { text-align:center; margin-top:20px; font-family:'DM Mono',monospace; font-size:10px; color:#90A4AE; letter-spacing:1px; }
+  @media (max-width:700px) { .footer { grid-template-columns:1fr; } .header { flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- PÁGINA 1 — VENEZUELA -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-label">Página 1A · Benchmark Venezuela</div>
+      <div class="header-title">Venezuela — Benchmark de Precios</div>
+      <div class="header-sub">Segmento Trabajo / Commute · Hasta $2,000 · Terreno plano / urbano · Precios en USD · 2025</div>
+    </div>
+    <div class="header-badge">BENCHMARK VENEZUELA</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="leg-dot" style="background:#1565C0"></div>TVS</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#CC0000"></div>Honda</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#E65100"></div>Bajaj</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#1B5E20"></div>Suzuki</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#880E4F"></div>Hero</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#F57F17"></div>Haojue</div>
+    <div class="legend-item" style="margin-left:auto"><span style="font-size:11px;color:#546E7A">Enfoque: commuter · trabajo · carga · máx $2,000 · 100–160cc</span></div>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Marca</th><th>Modelo</th><th>Segmento</th><th>Precio (USD)</th><th>Presencia VZ</th><th>Notas Estratégicas</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr><td colspan="6" class="section-row">── Entrada · Menos de $1,000</td></tr>
+
+      <tr class="row-hero">
+        <td class="brand-cell"><span class="brand-name">Hero*</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">vía Escuda Motos</span></td>
+        <td class="model-cell"><div class="model-name">Hero 150cc</div><div class="model-cc">150cc · Carb · Sin ABS</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter</span></td>
+        <td class="price-cell"><div class="price-val">$790–$1,010</div><div class="price-note">El más económico del mercado</div></td>
+        <td class="status-cell"><span class="status-badge s-partial">Indirecto</span><div class="status-note">No es Hero MotoCorp OEM real</div></td>
+        <td class="notes-cell"><span class="note-warn">⚠ No es Hero MotoCorp.</span> Unidades ensambladas en China vendidas por Escuda. Alto volumen en entrada. Solo contado — sin financiamiento.</td>
+      </tr>
+
+      <tr class="row-tvs">
+        <td class="brand-cell"><span class="brand-name">TVS</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Servisuministros JPG</span></td>
+        <td class="model-cell"><div class="model-name">Sport 100</div><div class="model-cc">99.7cc · Carb · Sin ABS</div></td>
+        <td><span class="seg-pill seg-utility">Utilitario</span></td>
+        <td class="price-cell"><div class="price-val">$930</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">OEM oficial · Ensamblado VZ</div></td>
+        <td class="notes-cell">Moped de entrada. Ensamblado localmente en Anzoátegui.</td>
+      </tr>
+
+      <tr class="row-haojue">
+        <td class="brand-cell"><span class="brand-name">Haojue</span><div class="brand-origin"><span class="brand-flag">🇨🇳</span><span class="brand-country">China (JV Suzuki)</span></div><span class="brand-sub">HJ / HJM / Solmotos VZ</span></td>
+        <td class="model-cell"><div class="model-name">HJ Sport / HJ125</div><div class="model-cc">125cc · Carb · Sin ABS</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter</span></td>
+        <td class="price-cell"><div class="price-val">$990</div><div class="price-note">Mejor relación valor/precio entrada</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">Ensamblado localmente VZ</div></td>
+        <td class="notes-cell"><span class="note-highlight">Ingeniería Suzuki a precio chino.</span> Supera al TVS Sport con especificaciones similares. Ensamblado local.</td>
+      </tr>
+
+      <tr><td colspan="6" class="section-row">── ★ Zona de Mayor Volumen VZ · $1,000–$2,000</td></tr>
+
+      <tr class="row-suzuki">
+        <td class="brand-cell"><span class="brand-name">Suzuki</span><div class="brand-origin"><span class="brand-flag">🇯🇵</span><span class="brand-country">Japón</span></div><span class="brand-sub">Soloson Import (motos)</span></td>
+        <td class="model-cell"><div class="model-name">GN 125 / EN 125</div><div class="model-cc">125cc · Carb · Sin ABS</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter</span></td>
+        <td class="price-cell"><div class="price-val">$950–$1,100</div><div class="price-note">Est. — mercado fragmentado</div></td>
+        <td class="status-cell"><span class="status-badge s-partial">Fragmentado</span></td>
+        <td class="notes-cell">Fuerte reconocimiento de marca. Solo mandato de motos vía Soloson. Sin distribuidor de carros.</td>
+      </tr>
+
+      <tr class="row-haojue">
+        <td class="brand-cell"><span class="brand-name">Haojue</span><div class="brand-origin"><span class="brand-flag">🇨🇳</span><span class="brand-country">China (JV Suzuki)</span></div><span class="brand-sub">HJ / HJM / Solmotos VZ</span></td>
+        <td class="model-cell"><div class="model-name">HJ150 DK / Street Sport</div><div class="model-cc">150cc · 4T · Refrigerado por aire</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter / Calle</span></td>
+        <td class="price-cell"><div class="price-val">$990–$1,475</div><div class="price-note">★ Mayor volumen VZ</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">Ensamblado localmente VZ</div></td>
+        <td class="notes-cell"><span class="note-highlight">Mejor precio/especificación en 150cc.</span> Calidad estándar Suzuki — amenaza clave para marcas indias en banda de mayor volumen.</td>
+      </tr>
+
+      <tr class="row-tvs">
+        <td class="brand-cell"><span class="brand-name">TVS</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Servisuministros JPG</span></td>
+        <td class="model-cell"><div class="model-name">HLX 150X</div><div class="model-cc">150cc · Carb · Sin ABS</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter</span></td>
+        <td class="price-cell"><div class="price-val">$1,200–$1,220</div><div class="price-note">★ Volumen principal TVS VZ</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">OEM oficial · Ensamblado VZ</div></td>
+        <td class="notes-cell"><span class="note-strong">Modelo de mayor volumen TVS en VZ.</span> Markup 2.2–2.5x FOB. Ensamblado en Anzoátegui. Competencia directa Haojue 150cc.</td>
+      </tr>
+
+      <tr class="row-tvs">
+        <td class="brand-cell"><span class="brand-name">TVS</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Servisuministros JPG</span></td>
+        <td class="model-cell"><div class="model-name">Trak 150</div><div class="model-cc">147.5cc · Carb · Sin ABS</div></td>
+        <td><span class="seg-pill seg-cargo">Trabajo / Carga</span></td>
+        <td class="price-cell"><div class="price-val">$1,220</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span></td>
+        <td class="notes-cell">Orientado a delivery y última milla. Flotas comerciales y mototaxi.</td>
+      </tr>
+
+      <tr class="row-honda">
+        <td class="brand-cell"><span class="brand-name">Honda</span><div class="brand-origin"><span class="brand-flag">🇯🇵</span><span class="brand-country">Japón</span></div><span class="brand-sub">Honda Venezuela</span></td>
+        <td class="model-cell"><div class="model-name">CB125F / CG150</div><div class="model-cc">125–150cc · OHC</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter</span></td>
+        <td class="price-cell"><div class="price-val">$1,100–$1,400</div><div class="price-note">Est. — sin precios públicos</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">Honda Venezuela oficial</div></td>
+        <td class="notes-cell"><span class="note-highlight">Marca de referencia premium.</span> Mayor reconocimiento y valor de reventa en VZ. Benchmark de calidad del mercado.</td>
+      </tr>
+
+      <tr class="row-haojue">
+        <td class="brand-cell"><span class="brand-name">Haojue</span><div class="brand-origin"><span class="brand-flag">🇨🇳</span><span class="brand-country">China (JV Suzuki)</span></div><span class="brand-sub">HJ / HJM / Solmotos VZ</span></td>
+        <td class="model-cell"><div class="model-name">DL160 "Baby V-Strom"</div><div class="model-cc">160cc · FI · ABS · Aventura</div></td>
+        <td><span class="seg-pill seg-commuter">Aventura / Commute</span></td>
+        <td class="price-cell"><div class="price-val">$1,630–$2,070</div><div class="price-note">Tope del rango VZ</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span></td>
+        <td class="notes-cell">FI y ABS a este precio — especificación rara en VZ. Sin competidor directo bajo $2,000 en este nicho.</td>
+      </tr>
+
+      <tr class="row-bajaj">
+        <td class="brand-cell"><span class="brand-name">Bajaj</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Grupo UMA Venezuela</span></td>
+        <td class="model-cell"><div class="model-name">Pulsar 150</div><div class="model-cc">150cc · DTS-i · 5 velocidades</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter</span></td>
+        <td class="price-cell"><div class="price-val">$1,600–$1,900</div><div class="price-note">Est. — Grupo UMA VZ</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">Ingresó VZ finales 2023</div></td>
+        <td class="notes-cell">Exclusivo Grupo UMA. <span class="note-warn">Solo contado — sin financiamiento.</span> 30%+ sobre TVS HLX para el mismo uso.</td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <!-- SEPARADOR ENTRE MERCADOS -->
+  <div class="page-break" style="margin:40px 0 30px;">
+    <div class="page-break-line"></div>
+    <div class="page-break-label">Página 1B · Benchmark Centroamérica — Terreno Montañoso · 150–250cc</div>
+    <div class="page-break-line"></div>
+  </div>
+
+<!-- PÁGINA 1B — CENTROAMÉRICA -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-label">Página 1B · Benchmark Centroamérica</div>
+      <div class="header-title">Centroamérica — Benchmark de Precios</div>
+      <div class="header-sub">Terreno montañoso · Segmento Trabajo / Commute · 150–250cc · Precios en USD · 2025</div>
+    </div>
+    <div class="header-badge">BENCHMARK CENTROAMÉRICA</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="leg-dot" style="background:#1565C0"></div>TVS</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#CC0000"></div>Honda</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#E65100"></div>Bajaj</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#880E4F"></div>Hero MotoCorp</div>
+    <div class="legend-item"><div class="leg-dot" style="background:#F57F17"></div>Haojue</div>
+    <div class="legend-item" style="margin-left:auto"><span style="font-size:11px;color:#546E7A">Terreno montañoso exige 150cc+ · Rango trabajo/commute $1,500–$3,500</span></div>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Marca</th><th>Modelo</th><th>Segmento</th><th>Precio Ref. (USD)</th><th>Presencia CA</th><th>Notas Estratégicas</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr><td colspan="6" class="section-row">── Entrada Montaña · $1,200–$1,800 · 150cc mínimo recomendado</td></tr>
+
+      <tr class="row-tvs">
+        <td class="brand-cell"><span class="brand-name">TVS</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Active Motors SA (Grupo Q) · GT/SV/HN/NI/CR</span></td>
+        <td class="model-cell"><div class="model-name">Raider 125 / HLX 150</div><div class="model-cc">125–150cc · Carb · Sin ABS</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter</span></td>
+        <td class="price-cell"><div class="price-val">$1,200–$1,500</div><div class="price-note">Est. precio CA</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">GT · SV · HN · NI · CR</div></td>
+        <td class="notes-cell">Punto de entrada TVS en CA. 125cc es mínimo viable en terreno plano — en montaña el 150cc es el estándar real de mercado.</td>
+      </tr>
+
+      <tr class="row-hero">
+        <td class="brand-cell"><span class="brand-name">Hero MotoCorp</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India · OEM #1 Mundial</span></div><span class="brand-sub">Indy Motos (GT) · Movesa (HN) · Casa Pellas (NI)</span></td>
+        <td class="model-cell"><div class="model-name">Hunk 160R / Hunk 160R 4V</div><div class="model-cc">163cc · Refrigerado por aire y aceite · ABS opt.</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter / Urbana</span></td>
+        <td class="price-cell"><div class="price-val">$2,380–$2,660</div><div class="price-note">HN ~$2,380 · GT ~$2,660</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">GT · SV · HN · NI · CR · PA</div></td>
+        <td class="notes-cell"><span class="note-highlight">163cc con 16.8 HP — ideal para subidas.</span> 131 puntos de contacto en Guatemala (Indy Motos). 0–60 en 4.4 seg. Tablero 100% digital. Fuerte presencia en mercados clave CA.</td>
+      </tr>
+
+      <tr class="row-bajaj">
+        <td class="brand-cell"><span class="brand-name">Bajaj</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Grupo UMA · GT/SV/HN/NI/CR</span></td>
+        <td class="model-cell"><div class="model-name">Pulsar NS160 / Pulsar 180</div><div class="model-cc">160–180cc · DTS-i · FI opt.</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter / Sport</span></td>
+        <td class="price-cell"><div class="price-val">$1,800–$2,200</div><div class="price-note">Est. precio CA</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">GT · SV · HN · NI · CR</div></td>
+        <td class="notes-cell">Grupo UMA domina distribución Bajaj en toda CA. 160–180cc es el rango de mayor volumen en terreno montañoso. Financiamiento disponible vía cadena UMA.</td>
+      </tr>
+
+      <tr><td colspan="6" class="section-row">── ★ Volumen Principal CA · $2,000–$3,500 · 160–200cc · Trabajo + Ruta</td></tr>
+
+      <tr class="row-tvs">
+        <td class="brand-cell"><span class="brand-name">TVS</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Active Motors SA (Grupo Q)</span></td>
+        <td class="model-cell"><div class="model-name">Apache RTR 200 4V</div><div class="model-cc">197.8cc · Carb/FI · Sin ABS</div></td>
+        <td><span class="seg-pill seg-commuter">Trabajo / Ruta</span></td>
+        <td class="price-cell"><div class="price-val">$2,400–$2,720</div><div class="price-note">GT Q20,990 ≈ $2,720</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">GT · SV · HN · NI · CR</div></td>
+        <td class="notes-cell"><span class="note-strong">Modelo estrella TVS en CA.</span> 200cc ideal para carreteras montañosas. Versión FI disponible. Co-desarrollado con BMW Motorrad heritage. Competencia directa Bajaj NS200.</td>
+      </tr>
+
+      <tr class="row-bajaj">
+        <td class="brand-cell"><span class="brand-name">Bajaj</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div><span class="brand-sub">Grupo UMA · GT/SV/HN/NI/CR</span></td>
+        <td class="model-cell"><div class="model-name">Pulsar NS200 UG</div><div class="model-cc">199.4cc · Líquido · 6 vel. · FI</div></td>
+        <td><span class="seg-pill seg-commuter">Trabajo / Ruta</span></td>
+        <td class="price-cell"><div class="price-val">$2,700–$3,110</div><div class="price-note">HN ~$2,700 · GT Q23,999 ≈ $3,110</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">GT · SV · HN · NI · CR</div></td>
+        <td class="notes-cell">Refrigerado por líquido — ventaja térmica en climas cálidos/montaña. Barras invertidas. 6 velocidades. Precio más alto que Apache RTR 200 — posicionado como premium indio. Competencia directa TVS Apache.</td>
+      </tr>
+
+      <tr class="row-hero">
+        <td class="brand-cell"><span class="brand-name">Hero MotoCorp</span><div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India · OEM #1 Mundial</span></div><span class="brand-sub">Indy Motos (GT) · Movesa (HN) · Casa Pellas (NI)</span></td>
+        <td class="model-cell"><div class="model-name">XPulse 200 4V / 200T</div><div class="model-cc">199.6cc · FI · ABS · Aventura</div></td>
+        <td><span class="seg-pill seg-cargo">Aventura / Ruta</span></td>
+        <td class="price-cell"><div class="price-val">$2,800–$3,300</div><div class="price-note">Est. basado en precios GT/HN</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">GT · SV · HN · NI · CR</div></td>
+        <td class="notes-cell"><span class="note-highlight">★ Ideal para terreno montañoso CA.</span> Rueda grande (21" delantera), suspensión larga, FI + ABS. Diseñada para ruta y fuera de camino. Segmento de trabajo en zonas rurales y montaña. Sin competidor directo en Hero a este precio.</td>
+      </tr>
+
+      <tr><td colspan="6" class="section-row">── Rango Superior · $3,000–$3,500 · 200–250cc · Ruta larga</td></tr>
+
+      <tr class="row-honda">
+        <td class="brand-cell"><span class="brand-name">Honda</span><div class="brand-origin"><span class="brand-flag">🇯🇵</span><span class="brand-country">Japón</span></div><span class="brand-sub">Subsidiarias directas CA</span></td>
+        <td class="model-cell"><div class="model-name">CB190R / XR190L</div><div class="model-cc">184–190cc · FI · ABS</div></td>
+        <td><span class="seg-pill seg-commuter">Commuter / Ruta</span></td>
+        <td class="price-cell"><div class="price-val">$2,800–$3,400</div><div class="price-note">Est. precio CA · Benchmark</div></td>
+        <td class="status-cell"><span class="status-badge s-present">Presente</span><div class="status-note">Todos los países CA</div></td>
+        <td class="notes-cell"><span class="note-highlight">Benchmark de calidad.</span> Honda marca el techo de precio aceptado por el mercado masivo. Las marcas indias compiten por debajo de este nivel con 85–90% de la especificación. No es objetivo de asociación.</td>
+      </tr>
+
+      <tr class="row-haojue">
+        <td class="brand-cell"><span class="brand-name">Haojue</span><div class="brand-origin"><span class="brand-flag">🇨🇳</span><span class="brand-country">China (JV Suzuki)</span></div><span class="brand-sub">Distribución CA no confirmada</span></td>
+        <td class="model-cell"><div class="model-name">DR300 / NK300</div><div class="model-cc">292–300cc · FI · ABS</div></td>
+        <td><span class="seg-pill seg-cargo">Aventura / Ruta</span></td>
+        <td class="price-cell"><div class="price-val">$2,500–$3,200</div><div class="price-note">Est. — presencia CA por confirmar</div></td>
+        <td class="status-cell"><span class="status-badge s-absent">Sin confirmar</span><div class="status-note">Verificar por llamada</div></td>
+        <td class="notes-cell">250–300cc Haojue serían competidores directos en el segmento de ruta CA si tuvieran distribución. Actualmente sin presencia confirmada en CA — verificar en llamada con exportación.</td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <div class="footer">
+    <div class="insight-box green">
+      <div class="insight-title">★ Diferencia Clave VZ vs CA</div>
+      <div class="insight-body">Venezuela es mercado de <strong>125–150cc</strong> por terreno plano y precio. Centroamérica es <strong>160–200cc mínimo</strong> por montaña. Son mercados distintos — el producto que mueve volumen en VZ no es el mismo que en CA.</div>
+    </div>
+    <div class="insight-box warn">
+      <div class="insight-title">⚡ Financiamiento = La Ventaja Decisiva</div>
+      <div class="insight-body">Martin (TVS) confirmó: <strong>el financiamiento es crítico</strong>. En CA Grupo UMA ya ofrece crédito vía su red. En VZ nadie lo ofrece aún. <strong>El operador que traiga financiamiento a VZ gana la categoría.</strong></div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">🏔️ Terreno Montañoso CA</div>
+      <div class="insight-body">En CA la <strong>cilindrada mínima real es 150cc</strong> — por debajo de eso el motor no aguanta subidas prolongadas. Los modelos de 200cc (Apache RTR 200, NS200, XPulse 200) son el <strong>estándar de trabajo en ruta</strong>.</div>
+    </div>
+    <div class="insight-box red">
+      <div class="insight-title">⚠ Hero MotoCorp — Brecha VZ</div>
+      <div class="insight-body"><strong>Hero tiene presencia fuerte en CA (131 puntos GT)</strong> pero cero presencia en Venezuela. La XPulse 200 es ideal para terreno CA. El Hunk 160R domina su segmento. <strong>Venezuela es su único gap regional obvio.</strong></div>
+    </div>
+  </div>
+
+  <div class="conf-note">CONFIDENCIAL · USO INTERNO · PRECIOS VERIFICADOS EN CONCESIONARIOS Y DATOS DE MERCADO · ABRIL 2026</div>
+
+<!-- SEPARADOR DE PÁGINA -->
+  <div class="page-break">
+    <div class="page-break-line"></div>
+    <div class="page-break-label">Página 2 — Mapa de Presencia Regional por Marca · Segmento Trabajo/Commute</div>
+    <div class="page-break-line"></div>
+  </div>
+
+<!-- PÁGINA 2 -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-label">Página 2 · Inteligencia de Marca</div>
+      <div class="header-title">Marca × País — Mapa de Presencia Regional</div>
+      <div class="header-sub">Venezuela · Guyana · Rep. Dominicana · Caribe · Centroamérica · Segmento Trabajo/Commute · Borrador — verificar con llamadas a distribuidores</div>
+    </div>
+    <div class="header-badge header-badge2">BORRADOR — VERIFICAR POR LLAMADA</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span style="background:var(--ltgreen);color:var(--green);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">TOMADO</span>&nbsp;distribuidor confirmado</div>
+    <div class="legend-item"><span style="background:var(--ltgold);color:var(--gold);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">PARCIAL</span>&nbsp;algunos mercados tomados, otros abiertos</div>
+    <div class="legend-item"><span style="background:var(--ltred);color:var(--red);padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700">ABIERTO</span>&nbsp;sin distribuidor confirmado</div>
+    <div class="legend-item" style="margin-left:auto"><span style="font-size:11px;color:#546E7A">⚠ Solo datos en línea — verificar con llamadas directas a cada distribuidor</span></div>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Marca</th>
+        <th>Modelos Clave (Trabajo/Commute ≤$2k)</th>
+        <th>Rango de Precio</th>
+        <th>Presencia Regional · País — Distribuidor</th>
+        <th>Notas</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- TVS -->
+      <tr class="row-tvs">
+        <td class="brand-cell">
+          <span class="brand-name">TVS</span>
+          <div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div>
+          <span class="brand-sub">Servisuministros JPG (VZ)</span>
+        </td>
+        <td class="model-cell">
+          <div class="model-name">HLX 150X · Trak 150 · Sport 100 · NTorq 125</div>
+          <div class="model-cc">99–150cc · Ensamblado Anzoátegui, VZ</div>
+        </td>
+        <td class="price-cell"><div class="price-val">$930–$1,963</div></td>
+        <td class="presence-cell">
+          <ul class="presence-list">
+            <li><span class="p-flag">🇻🇪</span><div><span class="p-country">Venezuela</span> <span class="p-dist">— Servisuministros JPG (Ciudad Guayana) · Ensamble en Anzoátegui · Sin financiamiento · Sin presencia en Caracas</span></div></li>
+            <li><span class="p-flag">🇬🇾</span><div><span class="p-country">Guyana</span> <span class="p-open">— ABIERTO · Martin: "muy interesados"</span></div></li>
+            <li><span class="p-flag">🇩🇴</span><div><span class="p-country">Rep. Dominicana</span> <span class="p-open">— ABIERTO según notas de Martin</span></div></li>
+            <li><span class="p-flag">🌴</span><div><span class="p-country">Caribe</span> <span class="p-open">— ABIERTO · Sin presencia confirmada en mercados insulares</span></div></li>
+            <li><span class="p-flag">🇬🇹</span><div><span class="p-country">Guatemala</span> <span class="p-dist">— Concesionarios independientes (verificar)</span></div></li>
+            <li><span class="p-flag">🇸🇻</span><div><span class="p-country">El Salvador</span> <span class="p-dist">— Active Motors SA (subsidiaria Grupo Q)</span></div></li>
+            <li><span class="p-flag">🇭🇳</span><div><span class="p-country">Honduras</span> <span class="p-dist">— Concesionarios independientes (verificar)</span></div></li>
+            <li><span class="p-flag">🇳🇮</span><div><span class="p-country">Nicaragua</span> <span class="p-dist">— Active Motors SA (subsidiaria Grupo Q)</span></div></li>
+            <li><span class="p-flag">🇨🇷</span><div><span class="p-country">Costa Rica</span> <span class="p-dist">— Active Motors SA (subsidiaria Grupo Q)</span></div></li>
+            <li><span class="p-flag">🇵🇦</span><div><span class="p-country">Panamá</span> <span class="p-dist">— Verificar distribuidor actual</span></div></li>
+            <li><span class="p-flag">🇨🇴</span><div><span class="p-country">Colombia</span> <span class="p-dist">— Auteco Mobility (verificar)</span></div></li>
+            <li><span class="p-flag">🇲🇽</span><div><span class="p-country">México</span> <span class="p-dist">— Motomex (ingresó 2025)</span></div></li>
+          </ul>
+        </td>
+        <td class="contact-cell">
+          <strong>Martin Corsunsky</strong><br>
+          Director Continental — Américas<br>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--grey)">martin.corsunsky@tvsmotor.com</span><br>
+          <div style="margin-top:8px;font-size:11px;color:#546E7A;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Notas de reunión:</div>
+          <ul class="tvs-notes">
+            <li>Mottu opera en Brasil y México — negocios de renta que TVS busca potenciar</li>
+            <li>Centroamérica: pueden apoyar como puente de entrada</li>
+            <li>Los contratos <strong>no son exclusivos en papel</strong>, sí en palabra — en ningún país tienen dos distribuidores</li>
+            <li>Con motos se construye marca; dos distribuidores generan guerra de precios</li>
+            <li>Ecuador abierto — Jaramillo quiere cambiar el distribuidor actual</li>
+            <li>Auteco maneja Colombia</li>
+            <li>TVS <strong>no trabaja con crédito</strong> — se requiere pipeline de 6 meses de inventario</li>
+            <li>Todos los mínimos dependen del país</li>
+            <li>60 días de tránsito India → LatAm · 30–60 días de crédito al punto de venta · 15–20 días para ensamblar</li>
+            <li>Precios FOB los define TVS; retail lo definen juntos · Markup: <strong>2.2–2.5x</strong></li>
+            <li>Muy interesados en <strong>Guyana</strong></li>
+            <li>Financiamiento es <strong>importantísimo</strong> en este mercado</li>
+            <li>Plan de negocio requerido: volumen, capital de trabajo, due diligence con Deloitte · Si el plan es realista: <strong>1–3 meses para firmar contrato</strong></li>
+          </ul>
+        </td>
+      </tr>
+
+      <!-- BAJAJ -->
+      <tr class="row-bajaj">
+        <td class="brand-cell">
+          <span class="brand-name">Bajaj</span>
+          <div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India</span></div>
+          <span class="brand-sub">Grupo UMA (CA + VZ)</span>
+        </td>
+        <td class="model-cell">
+          <div class="model-name">Boxer 150 · Discover 125 · CT100 · Pulsar 150</div>
+          <div class="model-cc">100–150cc · CBU importado · Sin ensamble en VZ</div>
+        </td>
+        <td class="price-cell"><div class="price-val">~$800–$1,900</div><div class="price-note">Boxer est. ~$800–$1,000</div></td>
+        <td class="presence-cell">
+          <ul class="presence-list">
+            <li><span class="p-flag">🇻🇪</span><div><span class="p-country">Venezuela</span> <span class="p-dist">— Grupo UMA Venezuela (Caracas, Chacao) · Solo contado · Sin financiamiento · Ingresó 2023</span></div></li>
+            <li><span class="p-flag">🇬🇾</span><div><span class="p-country">Guyana</span> <span class="p-open">— ABIERTO · Sin distribuidor confirmado</span></div></li>
+            <li><span class="p-flag">🇩🇴</span><div><span class="p-country">Rep. Dominicana</span> <span class="p-dist">— Importador local (verificar)</span></div></li>
+            <li><span class="p-flag">🌴</span><div><span class="p-country">Caribe</span> <span class="p-open">— ABIERTO · Sin presencia confirmada en mercados insulares</span></div></li>
+            <li><span class="p-flag">🇬🇹</span><div><span class="p-country">Guatemala</span> <span class="p-dist">— Grupo UMA Guatemala</span></div></li>
+            <li><span class="p-flag">🇸🇻</span><div><span class="p-country">El Salvador</span> <span class="p-dist">— Grupo UMA El Salvador</span></div></li>
+            <li><span class="p-flag">🇭🇳</span><div><span class="p-country">Honduras</span> <span class="p-dist">— Grupo UMA Honduras</span></div></li>
+            <li><span class="p-flag">🇳🇮</span><div><span class="p-country">Nicaragua</span> <span class="p-dist">— Grupo UMA Nicaragua</span></div></li>
+            <li><span class="p-flag">🇨🇷</span><div><span class="p-country">Costa Rica</span> <span class="p-dist">— Grupo UMA Costa Rica</span></div></li>
+            <li><span class="p-flag">🇵🇦</span><div><span class="p-country">Panamá</span> <span class="p-dist">— Verificar distribuidor actual</span></div></li>
+            <li><span class="p-flag">🇨🇴</span><div><span class="p-country">Colombia</span> <span class="p-dist">— Auteco Mobility (exclusivo)</span></div></li>
+            <li><span class="p-flag">🇲🇽</span><div><span class="p-country">México</span> <span class="p-dist">— Motodrive / ITC</span></div></li>
+          </ul>
+        </td>
+        <td class="contact-cell">
+          <span style="font-size:11px;color:#90A4AE;font-style:italic;">Llamada pendiente</span>
+        </td>
+      </tr>
+
+      <!-- HERO MOTOCORP -->
+      <tr class="row-hero">
+        <td class="brand-cell">
+          <span class="brand-name">Hero MotoCorp</span>
+          <div class="brand-origin"><span class="brand-flag">🇮🇳</span><span class="brand-country">India · OEM #1 Mundial</span></div>
+          <span class="brand-sub">HMCL · Hub de ensamble: Colombia</span>
+        </td>
+        <td class="model-cell">
+          <div class="model-name">Eco 150 · Splendor 110 · Ignitor 125 · Hunk 160R</div>
+          <div class="model-cc">100–160cc · Ensamblado Colombia · Exportado LatAm</div>
+        </td>
+        <td class="price-cell"><div class="price-val">~$800–$1,500</div><div class="price-note">Est. basado en precios Colombia</div></td>
+        <td class="presence-cell">
+          <ul class="presence-list">
+            <li><span class="p-flag">🇻🇪</span><div><span class="p-country">Venezuela</span> <span class="p-open">— ABIERTO · Sin distribuidor · Oportunidad prioritaria</span></div></li>
+            <li><span class="p-flag">🇬🇾</span><div><span class="p-country">Guyana</span> <span class="p-dist">— Listado en sitio HMCL (verificar si está activo)</span></div></li>
+            <li><span class="p-flag">🇩🇴</span><div><span class="p-country">Rep. Dominicana</span> <span class="p-dist">— Distribuidor local (verificar)</span></div></li>
+            <li><span class="p-flag">🌴</span><div><span class="p-country">Caribe</span> <span class="p-dist">— Parcial · Trinidad listado en sitio HMCL · otros verificar</span></div></li>
+            <li><span class="p-flag">🇬🇹</span><div><span class="p-country">Guatemala</span> <span class="p-dist">— Distribuidor local (verificar)</span></div></li>
+            <li><span class="p-flag">🇸🇻</span><div><span class="p-country">El Salvador</span> <span class="p-dist">— Distribuidor local (verificar)</span></div></li>
+            <li><span class="p-flag">🇭🇳</span><div><span class="p-country">Honduras</span> <span class="p-dist">— Movesa S.A.</span></div></li>
+            <li><span class="p-flag">🇳🇮</span><div><span class="p-country">Nicaragua</span> <span class="p-dist">— Casa Pellas (Grupo Pellas)</span></div></li>
+            <li><span class="p-flag">🇨🇷</span><div><span class="p-country">Costa Rica</span> <span class="p-dist">— Distribuidor local (verificar)</span></div></li>
+            <li><span class="p-flag">🇵🇦</span><div><span class="p-country">Panamá</span> <span class="p-dist">— Distribuidor local (verificar)</span></div></li>
+            <li><span class="p-flag">🇨🇴</span><div><span class="p-country">Colombia</span> <span class="p-dist">— HMCL Colombia (planta propia, Villa Rica, Cauca) · +66% interanual FY25</span></div></li>
+            <li><span class="p-flag">🇲🇽</span><div><span class="p-country">México</span> <span class="p-dist">— Nuevo distribuidor (ingresó 2024)</span></div></li>
+          </ul>
+        </td>
+        <td class="contact-cell">
+          <span style="font-size:11px;color:#90A4AE;font-style:italic;">Llamada pendiente</span>
+        </td>
+      </tr>
+
+      <!-- HAOJUE -->
+      <tr class="row-haojue">
+        <td class="brand-cell">
+          <span class="brand-name">Haojue</span>
+          <div class="brand-origin"><span class="brand-flag">🇨🇳</span><span class="brand-country">China (JV Suzuki)</span></div>
+          <span class="brand-sub">HJ / HJM — Solmotos VZ</span>
+        </td>
+        <td class="model-cell">
+          <div class="model-name">HJ150 DK · Street Sport · DL160</div>
+          <div class="model-cc">125–160cc · Ensamblado localmente VZ</div>
+        </td>
+        <td class="price-cell"><div class="price-val">$990–$2,070</div><div class="price-note">Mejor valor/especificación del segmento</div></td>
+        <td class="presence-cell">
+          <ul class="presence-list">
+            <li><span class="p-flag">🇻🇪</span><div><span class="p-country">Venezuela</span> <span class="p-dist">— Solmotos / Deal Motors · Ensamblado local · Crecimiento acelerado · Sin financiamiento</span></div></li>
+            <li><span class="p-flag">🇬🇾</span><div><span class="p-country">Guyana</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇩🇴</span><div><span class="p-country">Rep. Dominicana</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇭🇹</span><div><span class="p-country">Haiti</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇯🇲</span><div><span class="p-country">Jamaica</span> <span class="p-open">— ABIERTO · Haojue abierta a nuevo distribuidor (confirmado)</span></div></li>
+            <li><span class="p-flag">🇧🇸</span><div><span class="p-country">Bahamas</span> <span class="p-open">— ABIERTO · Haojue abierta a nuevo distribuidor (confirmado)</span></div></li>
+            <li><span class="p-flag">🇹🇹</span><div><span class="p-country">Trinidad & Tobago</span> <span class="p-open">— ABIERTO · Haojue abierta a nuevo distribuidor (confirmado)</span></div></li>
+            <li><span class="p-flag">🇬🇹</span><div><span class="p-country">Guatemala</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇸🇻</span><div><span class="p-country">El Salvador</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇭🇳</span><div><span class="p-country">Honduras</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇳🇮</span><div><span class="p-country">Nicaragua</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇵🇦</span><div><span class="p-country">Panamá</span> <span class="p-dist">— Distribuidor activo confirmado (Susanna Nie, abr 2026)</span></div></li>
+            <li><span class="p-flag">🇨🇷</span><div><span class="p-country">Costa Rica</span> <span class="p-open">— ABIERTO · No confirmado</span></div></li>
+            <li><span class="p-flag">🇨🇴</span><div><span class="p-country">Colombia</span> <span class="p-dist">— Verificar distribuidor</span></div></li>
+            <li><span class="p-flag">🇲🇽</span><div><span class="p-country">México</span> <span class="p-dist">— Verificar distribuidor</span></div></li>
+          </ul>
+        </td>
+        <td class="contact-cell">
+          <strong>Susanna Nie</strong><br>
+          Haojue International — Export Division<br>
+          <div style="margin-top:8px;font-size:11px;color:#546E7A;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Notas de conversación (abr 2026):</div>
+          <ul class="tvs-notes">
+            <li>Distribuidores activos en: <strong>Guatemala, El Salvador, Honduras, Nicaragua, Panamá</strong> (Centroamérica)</li>
+            <li>Distribuidores activos en: <strong>República Dominicana, Haití, Guyana</strong> (Caribe/Sur)</li>
+            <li>Mercados abiertos confirmados: <strong>Jamaica, Bahamas, Trinidad & Tobago</strong></li>
+            <li>Haojue abierta a establecer nuevo distribuidor en los tres mercados caribeños abiertos</li>
+          </ul>
+        </td>
+      </tr>
+
+      <!-- HONDA -->
+      <tr class="row-honda">
+        <td class="brand-cell">
+          <span class="brand-name">Honda</span>
+          <div class="brand-origin"><span class="brand-flag">🇯🇵</span><span class="brand-country">Japón</span></div>
+          <span class="brand-sub">Subsidiarias directas · No es modelo de distribuidor</span>
+        </td>
+        <td class="model-cell">
+          <div class="model-name">Wave 110 · CB125F · CG150</div>
+          <div class="model-cc">110–150cc · Referencia de calidad del mercado</div>
+        </td>
+        <td class="price-cell"><div class="price-val">$1,100–$1,400</div><div class="price-note">Est. — sin precios públicos</div></td>
+        <td class="presence-cell">
+          <ul class="presence-list">
+            <li><span class="p-flag">🇻🇪</span><div><span class="p-country">Venezuela</span> <span class="p-dist">— Honda Venezuela (subsidiaria oficial)</span></div></li>
+            <li><span class="p-flag">🇬🇾</span><div><span class="p-country">Guyana</span> <span class="p-dist">— Verificar distribuidor actual</span></div></li>
+            <li><span class="p-flag">🇩🇴</span><div><span class="p-country">Rep. Dominicana</span> <span class="p-dist">— Distribuidor Honda local (verificar)</span></div></li>
+            <li><span class="p-flag">🌴</span><div><span class="p-country">Caribe</span> <span class="p-dist">— TOMADO · Honda presente en principales mercados insulares vía distribuidores locales</span></div></li>
+            <li><span class="p-flag">🇬🇹</span><div><span class="p-country">Guatemala</span> <span class="p-dist">— Moto Honda de Guatemala</span></div></li>
+            <li><span class="p-flag">🇸🇻</span><div><span class="p-country">El Salvador</span> <span class="p-dist">— Honda de El Salvador</span></div></li>
+            <li><span class="p-flag">🇭🇳</span><div><span class="p-country">Honduras</span> <span class="p-dist">— Honda de Honduras</span></div></li>
+            <li><span class="p-flag">🇳🇮</span><div><span class="p-country">Nicaragua</span> <span class="p-dist">— Honda de Nicaragua</span></div></li>
+            <li><span class="p-flag">🇨🇷</span><div><span class="p-country">Costa Rica</span> <span class="p-dist">— Purdy Motor (Honda)</span></div></li>
+            <li><span class="p-flag">🇵🇦</span><div><span class="p-country">Panamá</span> <span class="p-dist">— Honda de Panamá</span></div></li>
+            <li><span class="p-flag">🇨🇴</span><div><span class="p-country">Colombia</span> <span class="p-dist">— Moto Honda Colombia (subsidiaria propia)</span></div></li>
+            <li><span class="p-flag">🇲🇽</span><div><span class="p-country">México</span> <span class="p-dist">— Moto Honda de México</span></div></li>
+          </ul>
+        </td>
+        <td class="contact-cell">
+          <span style="font-size:11px;color:var(--grey)">Solo referencia de mercado — no es un objetivo de asociación. Honda opera subsidiarias directas, no nombra distribuidores independientes.</span>
+        </td>
+      </tr>
+
+      <!-- SUZUKI MOTOS -->
+      <tr class="row-suzuki">
+        <td class="brand-cell">
+          <span class="brand-name">Suzuki Motos</span>
+          <div class="brand-origin"><span class="brand-flag">🇯🇵</span><span class="brand-country">Japón</span></div>
+          <span class="brand-sub">Soloson (VZ) · Sikamotors (GT/HN) · Inchcape (CR/PA)</span>
+        </td>
+        <td class="model-cell">
+          <div class="model-name">GN125 · EN125 · Gixxer 150</div>
+          <div class="model-cc">125–150cc · Ensamblado VZ (solo motos)</div>
+        </td>
+        <td class="price-cell"><div class="price-val">$950–$1,100</div><div class="price-note">Est. precio calle VZ</div></td>
+        <td class="presence-cell">
+          <ul class="presence-list">
+            <li><span class="p-flag">🇻🇪</span><div><span class="p-country">Venezuela</span> <span class="p-dist">— Soloson Import C.A. (Guatire, Miranda) · Solo mandato de motos · Ensamblado local</span></div></li>
+            <li><span class="p-flag">🇬🇾</span><div><span class="p-country">Guyana</span> <span class="p-open">— ABIERTO · No confirmado</span></div></li>
+            <li><span class="p-flag">🇩🇴</span><div><span class="p-country">Rep. Dominicana</span> <span class="p-open">— ABIERTO · No confirmado</span></div></li>
+            <li><span class="p-flag">🌴</span><div><span class="p-country">Caribe</span> <span class="p-dist">— Parcial · Barbados vía Inchcape · Otros verificar</span></div></li>
+            <li><span class="p-flag">🇬🇹</span><div><span class="p-country">Guatemala</span> <span class="p-dist">— Autos Suzuki / Grupo Sikamotors</span></div></li>
+            <li><span class="p-flag">🇸🇻</span><div><span class="p-country">El Salvador</span> <span class="p-dist">— Trader S.A. (Grupo Pellas)</span></div></li>
+            <li><span class="p-flag">🇭🇳</span><div><span class="p-country">Honduras</span> <span class="p-dist">— Grupo Sikamotors / HN Autos</span></div></li>
+            <li><span class="p-flag">🇳🇮</span><div><span class="p-country">Nicaragua</span> <span class="p-dist">— Casa Pellas S.A. (desde 1965)</span></div></li>
+            <li><span class="p-flag">🇨🇷</span><div><span class="p-country">Costa Rica</span> <span class="p-dist">— Inchcape (adquirió Vetrasa 2018)</span></div></li>
+            <li><span class="p-flag">🇵🇦</span><div><span class="p-country">Panamá</span> <span class="p-dist">— Motores Japoneses S.A. (Inchcape)</span></div></li>
+            <li><span class="p-flag">🇨🇴</span><div><span class="p-country">Colombia</span> <span class="p-dist">— Suzuki Motor de Colombia S.A. (subsidiaria propia)</span></div></li>
+          </ul>
+        </td>
+        <td class="contact-cell">
+          <span style="font-size:11px;color:#90A4AE;font-style:italic;">Llamada pendiente</span>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <div class="conf-note" style="margin-top:24px">
+    CONFIDENCIAL · USO INTERNO · PÁGINA 2 ES BORRADOR — TODA PRESENCIA POR PAÍS DEBE VERIFICARSE CON LLAMADAS DIRECTAS A DISTRIBUIDORES · ABRIL 2026
+  </div>
+
+</div>
+</body>
+</html>
